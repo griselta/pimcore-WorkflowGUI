@@ -29,11 +29,11 @@ pimcore.plugin.workflowgui.item = Class.create({
 
     loadComplete: function (transport) {
         var response = Ext.decode(transport.responseText);
-        if(response && response.success) {
+        if (response && response.success) {
             this.data = response.workflow;
 
             var modelName = 'PimcoreWorkflow';
-            if(!Ext.ClassManager.isCreated(modelName) ) {
+            if (!Ext.ClassManager.isCreated(modelName)) {
                 Ext.define(modelName, {
                     extend: 'Ext.data.Model',
                     idProperty: 'name'
@@ -41,18 +41,18 @@ pimcore.plugin.workflowgui.item = Class.create({
             }
 
             this.statesStore = new Ext.data.JsonStore({
-                data : this.data.states,
-                model : modelName
+                data: this.data.states,
+                model: modelName
             });
 
             this.statusStore = new Ext.data.JsonStore({
-                data : this.data.statuses,
-                model : modelName
+                data: this.data.statuses,
+                model: modelName
             });
 
             this.actionsStore = new Ext.data.JsonStore({
-                data : this.data.actions,
-                model : modelName
+                data: this.data.actions,
+                model: modelName
             });
 
             this.addLayout();
@@ -68,7 +68,7 @@ pimcore.plugin.workflowgui.item = Class.create({
             closable: true,
             autoScroll: true,
             title: this.data.name,
-            iconCls : 'pimcore_icon_workflow',
+            iconCls: 'pimcore_icon_workflow',
             items: [
                 this.getSettingsPanel(),
                 this.getStatusPanel(),
@@ -85,7 +85,7 @@ pimcore.plugin.workflowgui.item = Class.create({
             ]
         });
 
-        this.panel.on("destroy", function() {
+        this.panel.on("destroy", function () {
             delete this.parentPanel.panels["workflow_" + this.id];
         }.bind(this));
 
@@ -95,8 +95,8 @@ pimcore.plugin.workflowgui.item = Class.create({
         pimcore.layout.refresh();
     },
 
-    getSettingsPanel : function() {
-        if(!this.settingsPanel) {
+    getSettingsPanel: function () {
+        if (!this.settingsPanel) {
 
             var typesStore = [['object', 'object'], ['asset', 'asset'], ['document', 'document']];
 
@@ -134,29 +134,29 @@ pimcore.plugin.workflowgui.item = Class.create({
                 border: false,
                 autoScroll: true,
                 title: t('settings'),
-                iconCls : 'pimcore_icon_settings',
-                padding : 10,
+                iconCls: 'pimcore_icon_settings',
+                padding: 10,
                 items: [
                     {
-                        xtype : 'textfield',
-                        name : 'name',
+                        xtype: 'textfield',
+                        name: 'name',
                         width: 500,
-                        value : this.data.name,
-                        fieldLabel : t('name')
+                        value: this.data.name,
+                        fieldLabel: t('name')
                     },
                     {
-                        xtype : 'checkbox',
-                        name : 'enabled',
+                        xtype: 'checkbox',
+                        name: 'enabled',
                         width: 500,
-                        value : this.data.enabled,
-                        fieldLabel : t('enabled')
+                        value: this.data.enabled,
+                        fieldLabel: t('enabled')
                     },
                     {
-                        xtype : 'checkbox',
-                        name : 'allowUnpublished',
+                        xtype: 'checkbox',
+                        name: 'allowUnpublished',
                         width: 500,
-                        checked : this.data.allowUnpublished,
-                        fieldLabel : t('allow_unpusblished')
+                        checked: this.data.allowUnpublished,
+                        fieldLabel: t('allow_unpusblished')
                     },
                     {
                         xtype: 'combo',
@@ -200,7 +200,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                         editable: false,
                         forceSelection: true,
                         queryMode: 'local',
-                        multiSelect : true
+                        multiSelect: true
                     },
                     {
                         xtype: 'combo',
@@ -214,9 +214,9 @@ pimcore.plugin.workflowgui.item = Class.create({
                         editable: false,
                         forceSelection: true,
                         queryMode: 'local',
-                        multiSelect : true,
-                        valueField : 'id',
-                        displayField : 'text'
+                        multiSelect: true,
+                        valueField: 'id',
+                        displayField: 'text'
                     },
                     {
                         xtype: 'combo',
@@ -230,7 +230,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                         editable: false,
                         forceSelection: true,
                         queryMode: 'local',
-                        multiSelect : true
+                        multiSelect: true
                     },
                     {
                         xtype: 'combo',
@@ -244,7 +244,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                         editable: false,
                         forceSelection: true,
                         queryMode: 'local',
-                        multiSelect : true
+                        multiSelect: true
                     }
                 ]
             });
@@ -253,8 +253,8 @@ pimcore.plugin.workflowgui.item = Class.create({
         return this.settingsPanel;
     },
 
-    getStatusPanel : function() {
-        if(!this.statusPanel) {
+    getStatusPanel: function () {
+        if (!this.statusPanel) {
             var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
                 clicksToEdit: 1
             });
@@ -263,49 +263,49 @@ pimcore.plugin.workflowgui.item = Class.create({
                 border: false,
                 autoScroll: true,
                 title: t('statuses'),
-                iconCls : 'pimcore_icon_workflow',
+                iconCls: 'pimcore_icon_workflow',
                 items: [
                     {
-                        xtype : 'grid',
+                        xtype: 'grid',
                         margin: '0 0 15 0',
-                        store :  this.statusStore,
+                        store: this.statusStore,
                         plugins: [
                             cellEditing
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'name',
-                                text : t('name'),
-                                flex : 1,
-                                field : {
-                                    xtype: 'textfield'
-                                }
-                            },
-                            {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'label',
-                                text : t('label'),
+                                xtype: 'gridcolumn',
+                                dataIndex: 'name',
+                                text: t('name'),
+                                flex: 1,
                                 field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'objectLayout',
-                                text : t('custom_layout'),
-                                width : 100,
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'label',
+                                text: t('label'),
+                                field: {
+                                    xtype: 'textfield'
+                                }
+                            },
+                            {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'objectLayout',
+                                text: t('custom_layout'),
+                                width: 100,
                                 field: {
                                     xtype: 'numberfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'elementPublished',
-                                text : t('element_published'),
-                                width : 100,
+                                xtype: 'gridcolumn',
+                                dataIndex: 'elementPublished',
+                                text: t('element_published'),
+                                width: 100,
                                 field: {
                                     xtype: 'checkbox'
                                 }
@@ -326,10 +326,10 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
+                                text: t('add'),
+                                handler: function (btn) {
                                     Ext.MessageBox.prompt(t('add_workflow_status'), t('enter_the_name_of_the_new_workflow_status'),
-                                        function(button, value) {
+                                        function (button, value) {
                                             if (button == "ok") {
                                                 var u = {
                                                     name: value,
@@ -341,11 +341,11 @@ pimcore.plugin.workflowgui.item = Class.create({
                                         }.bind(this)
                                     );
                                 },
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     }
                 ]
@@ -355,12 +355,12 @@ pimcore.plugin.workflowgui.item = Class.create({
         return this.statusPanel;
     },
 
-    getStatesPanel : function() {
-        if(!this.statesPanel) {
+    getStatesPanel: function () {
+        if (!this.statesPanel) {
             var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
                 clicksToEdit: 1,
-                listeners : {
-                    edit : function() {
+                listeners: {
+                    edit: function () {
                         this.updateStatusStoreForTransitionDefinitions();
                     }.bind(this)
                 }
@@ -370,40 +370,40 @@ pimcore.plugin.workflowgui.item = Class.create({
                 border: false,
                 autoScroll: true,
                 title: t('states'),
-                iconCls : 'pimcore_icon_workflow',
+                iconCls: 'pimcore_icon_workflow',
                 items: [
                     {
-                        xtype : 'grid',
+                        xtype: 'grid',
                         margin: '0 0 15 0',
-                        store :  this.statesStore,
+                        store: this.statesStore,
                         plugins: [
                             cellEditing
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'name',
-                                text : t('name'),
-                                flex : 1,
-                                field : {
-                                    xtype: 'textfield'
-                                }
-                            },
-                            {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'label',
-                                text : t('label'),
+                                xtype: 'gridcolumn',
+                                dataIndex: 'name',
+                                text: t('name'),
+                                flex: 1,
                                 field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'color',
-                                text : t('color'),
-                                width : 100,
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'label',
+                                text: t('label'),
+                                field: {
+                                    xtype: 'textfield'
+                                }
+                            },
+                            {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'color',
+                                text: t('color'),
+                                width: 100,
                                 field: {
                                     xtype: 'textfield'
                                 }
@@ -424,10 +424,10 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
+                                text: t('add'),
+                                handler: function (btn) {
                                     Ext.MessageBox.prompt(t('add_workflow_state'), t('enter_the_name_of_the_new_workflow_state'),
-                                        function(button, value) {
+                                        function (button, value) {
                                             if (button == "ok") {
                                                 var u = {
                                                     name: value,
@@ -441,11 +441,11 @@ pimcore.plugin.workflowgui.item = Class.create({
                                         }.bind(this)
                                     );
                                 }.bind(this),
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     }
                 ]
@@ -455,31 +455,31 @@ pimcore.plugin.workflowgui.item = Class.create({
         return this.statesPanel;
     },
 
-    getActionsPanel : function() {
-        if(!this.actionsPanel) {
+    getActionsPanel: function () {
+        if (!this.actionsPanel) {
             this.actionsPanel = new Ext.Panel({
                 border: false,
                 autoScroll: true,
                 title: t('actions'),
-                iconCls : 'pimcore_icon_workflow',
+                iconCls: 'pimcore_icon_workflow',
                 items: [
                     {
-                        xtype : 'grid',
+                        xtype: 'grid',
                         margin: '0 0 15 0',
-                        store :  this.actionsStore,
+                        store: this.actionsStore,
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'name',
-                                text : t('name'),
-                                flex : 1
+                                xtype: 'gridcolumn',
+                                dataIndex: 'name',
+                                text: t('name'),
+                                flex: 1
                             },
                             {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'label',
-                                text : t('label')
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'label',
+                                text: t('label')
                             },
                             {
                                 menuDisabled: true,
@@ -510,16 +510,16 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
+                                text: t('add'),
+                                handler: function (btn) {
                                     Ext.MessageBox.prompt(t('add_workflow_action'), t('enter_the_name_of_the_new_workflow_action'),
-                                        function(button, value) {
+                                        function (button, value) {
                                             if (button == "ok") {
                                                 var u = {
                                                     name: value,
                                                     label: value,
-                                                    transitionTo : {},
-                                                    notes : {
+                                                    transitionTo: {},
+                                                    notes: {
                                                         required: false
                                                     }
                                                 };
@@ -529,11 +529,11 @@ pimcore.plugin.workflowgui.item = Class.create({
                                         }.bind(this)
                                     );
                                 },
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     }
                 ]
@@ -543,11 +543,11 @@ pimcore.plugin.workflowgui.item = Class.create({
         return this.actionsPanel;
     },
 
-    editAction : function(record, cb) {
+    editAction: function (record, cb) {
         var transitions = {};
         var transitionTo = Ext.isObject(record.get("transitionTo")) ? record.get("transitionTo") : {};
 
-        for(var state in transitionTo) {
+        for (var state in transitionTo) {
             var statuses = transitionTo[state];
 
             transitions[state] = {
@@ -563,7 +563,7 @@ pimcore.plugin.workflowgui.item = Class.create({
         }
 
         var modelName = 'PimcoreWorkflowTranstionTo';
-        if(!Ext.ClassManager.isCreated(modelName) ) {
+        if (!Ext.ClassManager.isCreated(modelName)) {
             Ext.define(modelName, {
                 extend: 'Ext.data.Model',
                 idProperty: 'state'
@@ -571,16 +571,16 @@ pimcore.plugin.workflowgui.item = Class.create({
         }
 
         var transitionsStore = new Ext.data.JsonStore({
-            data : $.map(transitions, function(value, index) {
+            data: $.map(transitions, function (value, index) {
                 return [value];
             }),
-            model : modelName
+            model: modelName
         });
 
         var cellEditingTransitions = Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToEdit: 1,
-            listeners : {
-                edit : function() {
+            listeners: {
+                edit: function () {
                     updateStateStore();
                 }
             }
@@ -591,7 +591,7 @@ pimcore.plugin.workflowgui.item = Class.create({
         });
 
         var additionalFieldsStore = new Ext.data.JsonStore({
-            data : record.get("additionalFields")
+            data: record.get("additionalFields")
         });
 
         function updateStateStore() {
@@ -605,7 +605,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                 return false;
             });
 
-            if(allowedStatesStore.getRange().length <= 0) {
+            if (allowedStatesStore.getRange().length <= 0) {
                 window.down("button").disable();
             }
             else {
@@ -625,18 +625,18 @@ pimcore.plugin.workflowgui.item = Class.create({
 
         var events = Object.clone(Ext.isObject(record.get("events")) ? record.get("events") : {});
         Ext.applyIf(events, {
-            'before' : [], 'success' : [], 'failure' : []
+            'before': [], 'success': [], 'failure': []
         });
 
-        for(var eventKey in events) {
+        for (var eventKey in events) {
             events[eventKey].splice(0, 0, eventKey);
         }
 
         var eventsStore = new Ext.data.ArrayStore({
-            data : $.map(events, function(value, index) {
+            data: $.map(events, function (value, index) {
                 return [value];
             }),
-            fields : [
+            fields: [
                 'key',
                 'class',
                 'method'
@@ -644,15 +644,15 @@ pimcore.plugin.workflowgui.item = Class.create({
         });
 
         var window = new Ext.window.Window({
-            width : 800,
-            height : 700,
-            modal : true,
-            resizeable : false,
-            layout : 'fit',
-            title : t('action'),
-            items : [{
-                xtype : 'form',
-                bodyStyle:'padding:20px 5px 20px 5px;',
+            width: 800,
+            height: 700,
+            modal: true,
+            resizeable: false,
+            layout: 'fit',
+            title: t('action'),
+            items: [{
+                xtype: 'form',
+                bodyStyle: 'padding:20px 5px 20px 5px;',
                 border: false,
                 autoScroll: true,
                 forceLayout: true,
@@ -673,24 +673,25 @@ pimcore.plugin.workflowgui.item = Class.create({
                             var notesTitle = window.down('[name="notesTitle"]').getValue();
                             var users = window.down('[name="users"]').getValue();
                             var notificationUsers = window.down('[name="notificationUsers"]').getValue();
+                            var notificationDocument = window.down('[name="notificationDocument"]').getValue();
                             var eventsRaw = eventsStore.getRange();
                             var eventsData = {};
 
-                            eventsRaw.map(function(record) {
-                                if(record.get("class") && record.get("method")) {
+                            eventsRaw.map(function (record) {
+                                if (record.get("class") && record.get("method")) {
                                     eventsData[record.get("key")] = [record.get("class"), record.get("method")]
                                 }
                             });
 
                             var transitions = transitionsStore.getRange();
                             var additionFieldsRecords = additionalFieldsStore.getRange();
-                            var additionalFields = additionFieldsRecords.map(function(record) {
+                            var additionalFields = additionFieldsRecords.map(function (record) {
                                 return record.data;
                             });
 
                             var transitionsTo = {};
 
-                            transitions.map(function(record) {
+                            transitions.map(function (record) {
                                 transitionsTo[record.get("state")] = record.get("status");
                             });
 
@@ -699,15 +700,18 @@ pimcore.plugin.workflowgui.item = Class.create({
                             record.set("label", label);
                             record.set("additionalFields", additionalFields);
                             record.set("notes", {
-                                required : notesRequired,
-                                title : notesTitle,
-                                type : notesType
+                                required: notesRequired,
+                                title: notesTitle,
+                                type: notesType
                             });
                             record.set("users", users);
                             record.set("notificationUsers", notificationUsers);
+                            if (record.get("notificationDocument")) {
+                                record.set("notificationDocument", notificationDocument);
+                            }
                             record.set("events", eventsData);
 
-                            if(Ext.isFunction(cb)) {
+                            if (Ext.isFunction(cb)) {
                                 cb.call(record)
                             }
 
@@ -716,41 +720,41 @@ pimcore.plugin.workflowgui.item = Class.create({
                         iconCls: 'pimcore_icon_apply'
                     }
                 ],
-                items : [
+                items: [
                     {
-                        xtype : 'textfield',
-                        name : 'name',
-                        anchor : '100%',
-                        value : record.get("name"),
-                        fieldLabel : t('name')
+                        xtype: 'textfield',
+                        name: 'name',
+                        anchor: '100%',
+                        value: record.get("name"),
+                        fieldLabel: t('name')
                     },
                     {
-                        xtype : 'textfield',
-                        name : 'label',
-                        anchor : '100%',
-                        value : record.get("label"),
-                        fieldLabel : t('label')
+                        xtype: 'textfield',
+                        name: 'label',
+                        anchor: '100%',
+                        value: record.get("label"),
+                        fieldLabel: t('label')
                     },
                     {
-                        xtype : 'checkbox',
-                        name : 'notesRequired',
-                        anchor : '100%',
-                        checked : record.get("notes").required,
-                        fieldLabel : t('notes_required')
+                        xtype: 'checkbox',
+                        name: 'notesRequired',
+                        anchor: '100%',
+                        checked: record.get("notes").required,
+                        fieldLabel: t('notes_required')
                     },
                     {
-                        xtype : 'textfield',
-                        name : 'notesType',
-                        anchor : '100%',
-                        value : record.get("notes").hasOwnProperty("type") ? record.get("notes").type : '',
-                        fieldLabel : t('notes_type')
+                        xtype: 'textfield',
+                        name: 'notesType',
+                        anchor: '100%',
+                        value: record.get("notes").hasOwnProperty("type") ? record.get("notes").type : '',
+                        fieldLabel: t('notes_type')
                     },
                     {
-                        xtype : 'textfield',
-                        name : 'notesTitle',
-                        anchor : '100%',
-                        value : record.get("notes").hasOwnProperty("title") ? record.get("notes").title : '',
-                        fieldLabel : t('notes_title')
+                        xtype: 'textfield',
+                        name: 'notesTitle',
+                        anchor: '100%',
+                        value: record.get("notes").hasOwnProperty("title") ? record.get("notes").title : '',
+                        fieldLabel: t('notes_title')
                     },
                     {
                         xtype: 'combo',
@@ -766,7 +770,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                         queryMode: 'local',
                         displayField: 'text',
                         valueField: 'id',
-                        multiSelect : true
+                        multiSelect: true
                     },
                     {
                         xtype: 'combo',
@@ -782,74 +786,99 @@ pimcore.plugin.workflowgui.item = Class.create({
                         queryMode: 'local',
                         displayField: 'text',
                         valueField: 'id',
-                        multiSelect : true
+                        multiSelect: true
                     },
+
+                    /* Notification document field added in workflow action. */
+                    Ext.create('Ext.form.FieldContainer', {
+                        layout: 'hbox',
+                        hidden: record.get("notificationDocument") ? false : true, //If old pimcore version or is not set in the workflow.
+                        items: [
+                            {
+                                xtype: 'textfield',
+                                width: '96%',
+                                id: 'notificationDocumentId',
+                                name: 'notificationDocument',
+                                value: record.get("notificationDocument"),
+                                fieldLabel: t('notifications_document'),
+                            }, {
+                                xtype: "button",
+                                iconCls: "pimcore_icon_search",
+                                handler: this.openSearchWindow.bind(this)
+
+                            }],
+                        componentCls: "object_field",
+                        border: false,
+                        style: {
+                            padding: 0
+                        }
+                    }),
                     {
-                        xtype : 'grid',
-                        title : t('events'),
+                        xtype: 'grid',
+                        title: t('events'),
                         margin: '0 0 15 0',
-                        store :  eventsStore,
+                        store: eventsStore,
                         plugins: [
                             Ext.create('Ext.grid.plugin.CellEditing', {
                                 clicksToEdit: 1
                             })
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'key',
-                                text : t('key'),
-                                flex : 1
+                                xtype: 'gridcolumn',
+                                dataIndex: 'key',
+                                text: t('key'),
+                                flex: 1
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'class',
-                                text : t('class'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'class',
+                                text: t('class'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'method',
-                                text : t('method'),
-                                field : {
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'method',
+                                text: t('method'),
+                                field: {
                                     xtype: 'textfield'
                                 }
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     },
                     {
-                        xtype : 'grid',
-                        title : t('transition_to'),
+                        xtype: 'grid',
+                        title: t('transition_to'),
                         margin: '0 0 15 0',
-                        store :  transitionsStore,
+                        store: transitionsStore,
                         plugins: [
                             cellEditingTransitions
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'state',
-                                text : t('state'),
-                                flex : 1,
-                                renderer : function(value) {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'state',
+                                text: t('state'),
+                                flex: 1,
+                                renderer: function (value) {
                                     var record = this.statesStore.getById(value);
 
-                                    if(record) {
+                                    if (record) {
                                         return record.get("label");
                                     }
 
                                     return "";
                                 }.bind(this),
-                                field : {
+                                field: {
                                     xtype: 'combo',
                                     name: 'types',
                                     width: 500,
@@ -864,18 +893,18 @@ pimcore.plugin.workflowgui.item = Class.create({
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'status',
-                                text : t('status'),
-                                renderer : function(value) {
-                                    if(Ext.isArray(value)) {
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'status',
+                                text: t('status'),
+                                renderer: function (value) {
+                                    if (Ext.isArray(value)) {
                                         var textValues = [];
 
-                                        Ext.each(value, function(v) {
+                                        Ext.each(value, function (v) {
                                             var record = this.statusStore.getById(v);
 
-                                            if(record) {
+                                            if (record) {
                                                 textValues.push(record.get("label"));
                                             }
                                         }.bind(this));
@@ -884,7 +913,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                                     }
                                     var record = this.statusStore.getById(value);
 
-                                    if(record) {
+                                    if (record) {
                                         return record.get("label");
                                     }
 
@@ -900,7 +929,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                                     editable: false,
                                     forceSelection: true,
                                     queryMode: 'local',
-                                    multiSelect : true,
+                                    multiSelect: true,
                                     displayField: 'label',
                                     valueField: 'name'
                                 }
@@ -923,9 +952,9 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
-                                    if(allowedStatesStore.getRange().length > 0) {
+                                text: t('add'),
+                                handler: function (btn) {
+                                    if (allowedStatesStore.getRange().length > 0) {
                                         var u = {
                                             state: '',
                                             status: ''
@@ -937,74 +966,74 @@ pimcore.plugin.workflowgui.item = Class.create({
                                         Ext.Msg.alert(t('add_workflow_transition'), t('problem_creating_new_workflow_action_transition'));
                                     }
                                 },
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     },
                     {
-                        xtype : 'grid',
-                        title : t('additional_fields'),
+                        xtype: 'grid',
+                        title: t('additional_fields'),
                         margin: '0 0 15 0',
-                        store :  additionalFieldsStore,
+                        store: additionalFieldsStore,
                         plugins: [
                             cellEditingAdditionalFields
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'name',
-                                text : t('name'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'name',
+                                text: t('name'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'fieldType',
-                                text : t('field_type'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'fieldType',
+                                text: t('field_type'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'title',
-                                text : t('title'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'title',
+                                text: t('title'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'blankText',
-                                text : t('blank_text'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'blankText',
+                                text: t('blank_text'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'required',
-                                text : t('mandatoryfield'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'required',
+                                text: t('mandatoryfield'),
+                                flex: 1,
+                                field: {
                                     xtype: 'checkbox'
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'setterFn',
-                                text : t('setter_function'),
-                                flex : 1,
-                                field : {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'setterFn',
+                                text: t('setter_function'),
+                                flex: 1,
+                                field: {
                                     xtype: 'textfield'
                                 }
                             },
@@ -1026,24 +1055,24 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
+                                text: t('add'),
+                                handler: function (btn) {
                                     var u = {
                                         name: '',
                                         fieldType: '',
-                                        title : '',
-                                        blankText : '',
-                                        required : false,
-                                        setterFn : ''
+                                        title: '',
+                                        blankText: '',
+                                        required: false,
+                                        setterFn: ''
                                     };
 
                                     btn.up("grid").store.add(u);
                                 },
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     }
                 ]
@@ -1055,14 +1084,63 @@ pimcore.plugin.workflowgui.item = Class.create({
         window.show();
     },
 
-    getTransitionDefinitionsPanel : function() {
-        if(!this.transitionDefinitionsPanel) {
+    openSearchWindow: function (e) {
+
+        var allowedTypes = [];
+        var allowedSpecific = {};
+        var allowedSubtypes = {};
+
+        allowedTypes.push("document");
+        allowedSubtypes.document = [];
+        allowedSubtypes.document.push('email');
+
+        pimcore.helpers.itemselector(false, this.addDataFromSelector.bind(this), {
+            type: allowedTypes,
+            subtype: allowedSubtypes,
+            specific: allowedSpecific
+        }, {
+            context: Ext.apply({scope: "objectEditor"}, this.getContext())
+        });
+    },
+
+    addDataFromSelector: function (data) {
+        this.data.id = data.id;
+        this.data.type = data.type;
+        this.data.subtype = data.subtype;
+        this.dataChanged = true;
+        var inputElement = Ext.getCmp('notificationDocumentId');
+
+        inputElement.setValue(data.fullpath);
+    },
+
+    getContext: function () {
+        this.createDefaultContext();
+        return this.context;
+    },
+
+
+    updateContext: function (context) {
+        this.createDefaultContext();
+        Ext.apply(this.context, context);
+    },
+
+    createDefaultContext: function () {
+        if (typeof this.context === "undefined") {
+            this.context = {
+                containerType: "object",
+                fieldname: null
+            };
+        }
+    },
+
+    getTransitionDefinitionsPanel: function () {
+        if (!this.transitionDefinitionsPanel) {
             var transitionDefinitions = {};
             var transitionDefinitionsRaw = this.data.transitionDefinitions;
             var globalTransition = [];
 
-            for(var status in transitionDefinitionsRaw) {
-                if(status === "globalActions") {
+            for (var status in transitionDefinitionsRaw) {
+                if (status === "globalActions") {
                     globalTransition = Object.keys(transitionDefinitionsRaw[status]);
                     continue;
                 }
@@ -1082,7 +1160,7 @@ pimcore.plugin.workflowgui.item = Class.create({
             }
 
             var modelName = 'PimcoreWorkflowTranstionDefinitionsTo';
-            if(!Ext.ClassManager.isCreated(modelName) ) {
+            if (!Ext.ClassManager.isCreated(modelName)) {
                 Ext.define(modelName, {
                     extend: 'Ext.data.Model',
                     idProperty: 'status'
@@ -1090,16 +1168,16 @@ pimcore.plugin.workflowgui.item = Class.create({
             }
 
             var transitionDefinitionStore = this.transitionDefinitionStore = new Ext.data.JsonStore({
-                data : $.map(transitionDefinitions, function(value, index) {
+                data: $.map(transitionDefinitions, function (value, index) {
                     return [value];
                 }),
-                model : modelName
+                model: modelName
             });
 
             var cellEditingTransitions = Ext.create('Ext.grid.plugin.CellEditing', {
                 clicksToEdit: 1,
-                listeners : {
-                    edit : function() {
+                listeners: {
+                    edit: function () {
                         this.updateStatusStoreForTransitionDefinitions();
                     }.bind(this)
                 }
@@ -1111,50 +1189,50 @@ pimcore.plugin.workflowgui.item = Class.create({
                 border: false,
                 autoScroll: true,
                 title: t('transition_definition'),
-                iconCls : 'pimcore_icon_workflow',
+                iconCls: 'pimcore_icon_workflow',
                 items: [
                     {
                         xtype: 'combo',
-                        padding : 10,
-                        fieldLabel : t('global_actions'),
+                        padding: 10,
+                        fieldLabel: t('global_actions'),
                         name: 'globalActions',
                         width: 500,
                         store: this.actionsStore,
-                        value : globalTransition,
+                        value: globalTransition,
                         triggerAction: 'all',
                         typeAhead: false,
                         editable: false,
                         forceSelection: true,
                         queryMode: 'local',
-                        multiSelect : true,
+                        multiSelect: true,
                         displayField: 'label',
                         valueField: 'name'
                     },
                     {
-                        xtype : 'grid',
-                        title : t('transition_to'),
+                        xtype: 'grid',
+                        title: t('transition_to'),
                         margin: '0 0 15 0',
-                        store :  this.transitionDefinitionStore,
+                        store: this.transitionDefinitionStore,
                         plugins: [
                             cellEditingTransitions
                         ],
                         sm: Ext.create('Ext.selection.RowModel', {}),
-                        columns : [
+                        columns: [
                             {
-                                xtype : 'gridcolumn',
-                                dataIndex : 'status',
-                                text : t('status'),
-                                flex : 1,
-                                renderer : function(value) {
+                                xtype: 'gridcolumn',
+                                dataIndex: 'status',
+                                text: t('status'),
+                                flex: 1,
+                                renderer: function (value) {
                                     var record = this.statusStore.getById(value);
 
-                                    if(record) {
+                                    if (record) {
                                         return record.get("label");
                                     }
 
                                     return "";
                                 }.bind(this),
-                                field : {
+                                field: {
                                     xtype: 'combo',
                                     name: 'types',
                                     width: 500,
@@ -1169,18 +1247,18 @@ pimcore.plugin.workflowgui.item = Class.create({
                                 }
                             },
                             {
-                                xtype : 'gridcolumn',
-                                flex : 1,
-                                dataIndex : 'actions',
-                                text : t('actions'),
-                                renderer : function(value) {
-                                    if(Ext.isArray(value)) {
+                                xtype: 'gridcolumn',
+                                flex: 1,
+                                dataIndex: 'actions',
+                                text: t('actions'),
+                                renderer: function (value) {
+                                    if (Ext.isArray(value)) {
                                         var textValues = [];
 
-                                        Ext.each(value, function(v) {
+                                        Ext.each(value, function (v) {
                                             var record = this.actionsStore.getById(v);
 
-                                            if(record) {
+                                            if (record) {
                                                 textValues.push(record.get("label"));
                                             }
                                         }.bind(this));
@@ -1189,7 +1267,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                                     }
                                     var record = this.actionsStore.getById(value);
 
-                                    if(record) {
+                                    if (record) {
                                         return record.get("label");
                                     }
 
@@ -1205,7 +1283,7 @@ pimcore.plugin.workflowgui.item = Class.create({
                                     editable: false,
                                     forceSelection: true,
                                     queryMode: 'local',
-                                    multiSelect : true,
+                                    multiSelect: true,
                                     displayField: 'label',
                                     valueField: 'name'
                                 }
@@ -1228,9 +1306,9 @@ pimcore.plugin.workflowgui.item = Class.create({
                         ],
                         tbar: [
                             {
-                                text:t('add'),
-                                handler: function(btn) {
-                                    if(this.allowedStatusStoreForTransitionDefinitons.getRange().length > 0) {
+                                text: t('add'),
+                                handler: function (btn) {
+                                    if (this.allowedStatusStoreForTransitionDefinitons.getRange().length > 0) {
                                         var u = {
                                             state: '',
                                             status: ''
@@ -1242,11 +1320,11 @@ pimcore.plugin.workflowgui.item = Class.create({
                                         Ext.Msg.alert(t('add_workflow'), t('problem_creating_new_workflow_transition_definition'));
                                     }
                                 }.bind(this),
-                                iconCls:"pimcore_icon_add"
+                                iconCls: "pimcore_icon_add"
                             }
                         ],
-                        viewConfig:{
-                            forceFit:true
+                        viewConfig: {
+                            forceFit: true
                         }
                     }
                 ]
@@ -1258,7 +1336,7 @@ pimcore.plugin.workflowgui.item = Class.create({
         return this.transitionDefinitionsPanel;
     },
 
-    updateStatusStoreForTransitionDefinitions : function () {
+    updateStatusStoreForTransitionDefinitions: function () {
         this.allowedStatusStoreForTransitionDefinitons.filterBy(function (r) {
             var id = r.data.name;
 
@@ -1276,7 +1354,7 @@ pimcore.plugin.workflowgui.item = Class.create({
             method: "post",
             params: {
                 data: this.getData(),
-                id : this.id
+                id: this.id
             },
             success: this.saveOnComplete.bind(this)
         });
@@ -1284,35 +1362,41 @@ pimcore.plugin.workflowgui.item = Class.create({
 
     getData: function () {
         var settings = this.settingsPanel.getForm().getFieldValues();
-        var statuses = this.statusStore.getRange().map(function(record) {return record.data;});
-        var states = this.statesStore.getRange().map(function(record) {return record.data;});
-        var actions = this.actionsStore.getRange().map(function(record) {return record.data;});
+        var statuses = this.statusStore.getRange().map(function (record) {
+            return record.data;
+        });
+        var states = this.statesStore.getRange().map(function (record) {
+            return record.data;
+        });
+        var actions = this.actionsStore.getRange().map(function (record) {
+            return record.data;
+        });
         var transitionsDefinitions = this.transitionDefinitionStore.getRange();
 
         var transitionsDefinitionsData = {
-            globalActions : {}
+            globalActions: {}
         };
 
-        Ext.each(this.transitionDefinitionsPanel.down('[name="globalActions"]').getValue(), function(val) {
+        Ext.each(this.transitionDefinitionsPanel.down('[name="globalActions"]').getValue(), function (val) {
             transitionsDefinitionsData.globalActions[val] = null;
         });
 
-        transitionsDefinitions.map(function(record) {
+        transitionsDefinitions.map(function (record) {
             transitionsDefinitionsData[record.get("status")] = {
-                "validActions" : {}
+                "validActions": {}
             };
 
-            Ext.each(record.get("actions"), function(val) {
+            Ext.each(record.get("actions"), function (val) {
                 transitionsDefinitionsData[record.get("status")]["validActions"][val] = null;
             });
         });
 
         return Ext.JSON.encode({
             settings: settings,
-            statuses : statuses,
-            states : states,
-            actions : actions,
-            transitionDefinitions : transitionsDefinitionsData
+            statuses: statuses,
+            states: states,
+            actions: actions,
+            transitionDefinitions: transitionsDefinitionsData
         });
     },
 
@@ -1328,7 +1412,7 @@ pimcore.plugin.workflowgui.item = Class.create({
         this.parentPanel.getEditPanel().setActiveTab(this.panel);
     },
 
-    deepCloneStore : function  (source) {
+    deepCloneStore: function (source) {
         source = Ext.isString(source) ? Ext.data.StoreManager.lookup(source) : source;
 
         var target = Ext.create(source.$className, {
@@ -1341,4 +1425,6 @@ pimcore.plugin.workflowgui.item = Class.create({
 
         return target;
     }
+
+
 });
